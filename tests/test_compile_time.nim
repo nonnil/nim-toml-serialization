@@ -33,7 +33,7 @@ const
   xx = Toml.loadFile("tests/" & fruitFile, Fruits)
   yy = Toml.decode(toml, Fruits)
   zz = Toml.decode(toml.toBlob, Fruits)
-  sv = Toml.loadFile("tests" / serverFile, Server, "server")
+  sv = Toml.loadFile("tests" / serverFile, Server)
 
 suite "compile time decoder":
   test "server":
