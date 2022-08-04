@@ -6,6 +6,7 @@
 # at your option. This file may not be copied, modified, or distributed except according to those terms.
 
 import
+  std / os,
   unittest2,
   ../toml_serialization
 
@@ -14,6 +15,12 @@ type
     fruit1: string
     fruit2: int
     fruit3: string
+    
+  Server = object
+    version: string
+    address: string
+    port: int
+    staticDir: string
 
 proc toBlob(x: string): seq[byte] =
   result = newSeq[byte](x.len)
@@ -21,12 +28,21 @@ proc toBlob(x: string): seq[byte] =
 
 const
   fruitFile = "tomls/fruits.toml"
+  serverFile = "tomls/server.toml"
   toml = staticRead fruitFile
   xx = Toml.loadFile("tests/" & fruitFile, Fruits)
   yy = Toml.decode(toml, Fruits)
   zz = Toml.decode(toml.toBlob, Fruits)
+  sv = Toml.loadFile("tests" / serverFile)
 
 suite "compile time decoder":
+  test "server":
+    check:
+      sv.version == "0.0.1"
+      sv.address == "0.0.0.0"
+      sv.port == 1984
+      sv.staticDir == "./public"
+      
   test "compile time loadFile":
     check xx.fruit1 == "Apple"
     check xx.fruit2 == 1
